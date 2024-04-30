@@ -59,6 +59,22 @@ func TestFormatConfig(t *testing.T) {
 `,
 			wantErr: true,
 		},
+		{
+			name: "Nested",
+			config: `
+{
+"outbounds": [
+{
+"tag": "unknown",
+"type": "shadowsocks",
+"tls": {
+"enabled": true
+}
+}
+]
+}`,
+			wantErr: false,
+		},
 	}
 
 	for _, test := range tt {

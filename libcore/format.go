@@ -22,7 +22,7 @@ func parseConfig(configContent string) (option.Options, error) {
 }
 
 func FormatConfig(configContent string) (string, error) {
-	options, err := parseConfig(configContent)
+	configMap, err := json.UnmarshalExtended[map[string]any]([]byte(configContent))
 	if err != nil {
 		return "", err
 	}
@@ -30,7 +30,7 @@ func FormatConfig(configContent string) (string, error) {
 	var buffer bytes.Buffer
 	encoder := json.NewEncoder(&buffer)
 	encoder.SetIndent("", "  ")
-	err = encoder.Encode(options)
+	err = encoder.Encode(configMap)
 	if err != nil {
 		return "", err
 	}
