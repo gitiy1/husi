@@ -4,6 +4,9 @@ set -e
 
 source buildScript/init/version.sh
 
+tar --version
+gzip --version
+
 DIR="app/src/main/assets/sing-box"
 GENERATER="libcore/cmd/ruleset_generate"
 rm -rf $DIR || true
@@ -16,8 +19,8 @@ mkdir -p $DIR
 # }
 
 function pack() {
-  local name=$1
-  tar --mtime='1970-01-01' -czf "${name}.tgz" "ruleset/$name"
+	local name=$1
+	tar --mtime='1970-01-01' -czf "${name}.tgz" "ruleset/$name"
 }
 
 echo "GEOIP: $GEOIP_VERSION"
