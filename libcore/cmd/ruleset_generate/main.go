@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"slices"
 
 	"github.com/sagernet/sing-box/common/geosite"
 	"github.com/sagernet/sing-box/common/srs"
@@ -54,6 +55,11 @@ func main() {
 			log.Fatalln(err)
 			return
 		}
+		// Re-sort domainMap
+		for key, value := range domainMap {
+			slices.SortFunc(value, compareGeositeItem)
+			domainMap[key] = value
+		}
 		for code, domains := range domainMap {
 			var headlessRule option.DefaultHeadlessRule
 			defaultRule := geosite.Compile(domains)
@@ -91,10 +97,15 @@ func main() {
 			log.Fatalln(err)
 			return
 		}
-		/*metadata*/ _, countryMap, err := generateGeoip(geoipData)
+		countryMap, err := generateGeoip(geoipData)
 		if err != nil {
 			log.Fatalln(err)
 			return
+		}
+		// Re-sort countryMap
+		for key, value := range countryMap {
+			slices.SortFunc(value, compareIPNet)
+			countryMap[key] = value
 		}
 		for countryCode, ipNets := range countryMap {
 			var headlessRule option.DefaultHeadlessRule

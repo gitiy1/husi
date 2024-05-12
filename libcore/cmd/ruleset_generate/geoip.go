@@ -8,10 +8,8 @@ import (
 	"github.com/oschwald/maxminddb-golang"
 )
 
-func generateGeoip(data []byte) (metadata maxminddb.Metadata, countryMap map[string][]*net.IPNet,
-	err error,
-) {
-	metadata, countryMap, err = parseGeoip(data)
+func generateGeoip(data []byte) (countryMap map[string][]*net.IPNet, err error) {
+	countryMap, err = parseGeoip(data)
 	if err != nil {
 		return
 	}
@@ -23,14 +21,11 @@ func generateGeoip(data []byte) (metadata maxminddb.Metadata, countryMap map[str
 	return
 }
 
-func parseGeoip(binary []byte) (metadata maxminddb.Metadata, countryMap map[string][]*net.IPNet,
-	err error,
-) {
+func parseGeoip(binary []byte) (countryMap map[string][]*net.IPNet, err error) {
 	database, err := maxminddb.FromBytes(binary)
 	if err != nil {
 		return
 	}
-	metadata = database.Metadata
 	networks := database.Networks(maxminddb.SkipAliasedNetworks)
 	countryMap = make(map[string][]*net.IPNet)
 	var country geoip2.Enterprise
